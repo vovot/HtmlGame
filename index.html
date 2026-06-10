@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>暗黑导航 · 可编辑</title>
+    <style>
+        :root {
+            --bg: #1a1a24;
+            --surface: #252531;
+            --surface2: #2f2f3d;
+            --text: #e0e0e0;
+            --text-secondary: #b0b0c0;
+            --accent: #7b9dd6;
+            --accent-glow: rgba(123, 157, 214, 0.3);
+            --danger: #e57373;
+            --danger-bg: #3e2222;
+            --border: #3d3d50;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 10px;
+            transition: background 0.3s;
+            color: var(--text);
+        }
+
+        body.edit-mode {
+            background: #1f1f2b;
+        }
+
+        .toolbar {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        h2 {
+            color: var(--text);
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-btn {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .toggle-btn:active {
+            background: #5f7db8;
+        }
+        .toggle-btn.editing {
+            background: #d98c4a;
+            box-shadow: 0 0 12px rgba(217, 140, 74, 0.5);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .btn-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            background: var(--surface);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            font-weight: 500;
+            font-size: 16px;
+            transition: transform 0.1s, background 0.2s, box-shadow 0.2s;
+            user-select: none;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            background: var(--surface2);
+        }
+
+        /* 编辑模式下的按钮样式 */
+        body.edit-mode .btn {
+            background: var(--surface2);
+            border: 2px dashed #d98c4a;
+            pointer-events: none;
+            cursor: default;
+            height: auto;
+            flex-direction: column;
+            padding: 8px 6px;
+            font-size: 15px;
+            text-align: center;
+            word-break: break-word;
+            color: var(--text);
+            box-shadow: none;
+        }
+
+        .edit-controls {
+            display: none;
+            margin-top: 6px;
+            gap: 6px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        body.edit-mode .edit-controls {
+            display: flex;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            background: var(--bg);
+            color: var(--text);
+            font-family: inherit;
+        }
+        .edit-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .edit-link-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            background: var(--bg);
+            color: var(--text-secondary);
+            font-family: inherit;
+        }
+        .edit-link-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .action-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+            color: var(--text);
+        }
+
+        .action-btn.delete-btn {
+            background: var(--danger-bg);
+            border-color: #753333;
+            color: var(--danger);
+        }
+        .action-btn.delete-btn:active {
+            background: #502828;
+        }
+
+        .add-btn {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            margin-top: 18px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow);
+        }
+        body.edit-mode .add-btn {
+            display: block;
+        }
+        .add-btn:active {
+            background: #5f7db8;
+        }
+
+        /* 空状态提示 */
+        .empty-hint {
+            display: none;
+            color: var(--text-secondary);
+            text-align: center;
+            width: 100%;
+            grid-column: 1 / -1;
+            padding: 30px;
+            font-size: 16px;
+        }
+        .grid:empty+.empty-hint {
+            display: block;
+        }
+
+        /* 手机端自适应 */
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .btn {
+                height: 50px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <h2>🌙 导航</h2>
+        <button class="toggle-btn" id="toggleEditBtn">✏️ 编辑</button>
+    </div>
+
+    <div class="grid" id="buttonGrid">
+        <!-- 按钮通过JS动态生成 -->
+    </div>
+    <div class="empty-hint" id="emptyHint">⚡ 点击「编辑」添加你的游戏</div>
+
+    <button class="add-btn" id="addButtonBtn">➕ 新增按钮</button>
+
+    <script>
+        (function() {
+            const STORAGE_KEY = 'dark_nav_buttons_data_v2';
+
+            // 默认按钮数据（从1到30，第27个指向jlh.html）
+            const DEFAULT_BUTTONS = [];
+            for (let i = 1; i <= 30; i++) {
+                DEFAULT_BUTTONS.push({
+                    id: i,
+                    name: String(i),
+                    link: i === 27 ? 'jlh.html' : ''
+                });
+            }
+
+            let buttonsData = [];
+            let editMode = false;
+
+            const grid = document.getElementById('buttonGrid');
+            const toggleBtn = document.getElementById('toggleEditBtn');
+            const addBtn = document.getElementById('addButtonBtn');
+            const emptyHint = document.getElementById('emptyHint');
+            const body = document.body;
+
+            function loadData() {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    try {
+                        buttonsData = JSON.parse(stored);
+                        buttonsData = buttonsData.map((item, index) => ({
+                            id: item.id || Date.now() + index,
+                            name: item.name || '',
+                            link: item.link || ''
+                        }));
+                    } catch (e) {
+                        buttonsData = [...DEFAULT_BUTTONS];
+                    }
+                } else {
+                    buttonsData = [...DEFAULT_BUTTONS];
+                }
+                if (buttonsData.length === 0) {
+                    buttonsData = [...DEFAULT_BUTTONS];
+                    saveData();
+                }
+            }
+
+            function saveData() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(buttonsData));
+            }
+
+            function generateId() {
+                return Date.now() + Math.random();
+            }
+
+            function renderButtons() {
+                grid.innerHTML = '';
+                if (buttonsData.length === 0) {
+                    emptyHint.style.display = 'block';
+                } else {
+                    emptyHint.style.display = 'none';
+                }
+
+                buttonsData.forEach((btnData, index) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'btn-wrapper';
+                    wrapper.dataset.index = index;
+
+                    if (!editMode) {
+                        // 普通模式
+                        const link = btnData.link && btnData.link.trim() !== '' ? btnData.link : 'javascript:void(0)';
+                        const a = document.createElement('a');
+                        a.className = 'btn';
+                        a.href = link;
+                        a.textContent = btnData.name || '未命名';
+                        a.addEventListener('click', (e) => {
+                            if (!btnData.link || btnData.link.trim() === '') {
+                                e.preventDefault();
+                            }
+                        });
+                        wrapper.appendChild(a);
+                    } else {
+                        // 编辑模式
+                        const displayDiv = document.createElement('div');
+                        displayDiv.className = 'btn';
+                        displayDiv.textContent = btnData.name || '未命名';
+
+                        const controls = document.createElement('div');
+                        controls.className = 'edit-controls';
+
+                        // 名称输入框
+                        const nameInput = document.createElement('input');
+                        nameInput.type = 'text';
+                        nameInput.className = 'edit-input';
+                        nameInput.value = btnData.name || '';
+                        nameInput.placeholder = '按钮名称';
+                        nameInput.addEventListener('input', (e) => {
+                            const newName = e.target.value.trim();
+                            btnData.name = newName;
+                            displayDiv.textContent = newName || '未命名';
+                            // 核心功能：自动同步链接为 名称.html
+                            const autoLink = newName ? newName + '.html' : '';
+                            btnData.link = autoLink;
+                            // 同时更新链接输入框的值
+                            const linkInput = controls.querySelector('.edit-link-input');
+                            if (linkInput) {
+                                linkInput.value = autoLink;
+                            }
+                            saveData();
+                        });
+
+                        // 链接输入框
+                        const linkInput = document.createElement('input');
+                        linkInput.type = 'text';
+                        linkInput.className = 'edit-link-input';
+                        linkInput.value = btnData.link || '';
+                        linkInput.placeholder = '链接 (如 game.html)';
+                        linkInput.addEventListener('input', (e) => {
+                            btnData.link = e.target.value;
+                            saveData();
+                        });
+
+                        // 删除按钮
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'action-btn delete-btn';
+                        deleteBtn.textContent = '🗑️';
+                        deleteBtn.title = '删除按钮';
+                        deleteBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm(`确定要删除按钮“${btnData.name || '未命名'}”吗？`)) {
+                                buttonsData.splice(index, 1);
+                                saveData();
+                                renderButtons();
+                            }
+                        });
+
+                        controls.appendChild(nameInput);
+                        controls.appendChild(linkInput);
+                        controls.appendChild(deleteBtn);
+
+                        wrapper.appendChild(displayDiv);
+                        wrapper.appendChild(controls);
+                    }
+
+                    grid.appendChild(wrapper);
+                });
+            }
+
+            function setEditMode(enabled) {
+                editMode = enabled;
+                if (enabled) {
+                    body.classList.add('edit-mode');
+                    toggleBtn.textContent = '✅ 完成';
+                    toggleBtn.classList.add('editing');
+                } else {
+                    body.classList.remove('edit-mode');
+                    toggleBtn.textContent = '✏️ 编辑';
+                    toggleBtn.classList.remove('editing');
+                }
+                renderButtons();
+            }
+
+            function addNewButton() {
+                const newBtn = {
+                    id: generateId(),
+                    name: '新按钮',
+                    link: '新按钮.html' // 初始也同步链接
+                };
+                buttonsData.push(newBtn);
+                saveData();
+                renderButtons();
+                const lastWrapper = grid.lastElementChild;
+                if (lastWrapper) {
+                    lastWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            toggleBtn.addEventListener('click', () => {
+                setEditMode(!editMode);
+            });
+
+            addBtn.addEventListener('click', addNewButton);
+
+            // 初始化
+            loadData();
+            setEditMode(false);
+        })();
+    </script>
+</body>
+</html>
