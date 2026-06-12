@@ -25,12 +25,11 @@ canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; pointe
 @keyframes float { 0%, 100% { transform: translate(-50%,-50%) translateY(0); } 50% { transform: translate(-50%,-50%) translateY(-12px); } }
 @keyframes btnFlip { 0% { transform: perspective(400px) rotateY(0deg); } 50% { transform: perspective(400px) rotateY(90deg); } 100% { transform: perspective(400px) rotateY(0deg); } }
 #game-color-btns { position: absolute; bottom: 10px; left: 0; width: 100%; display: flex; justify-content: space-around; align-items: flex-end; z-index: 200; pointer-events: auto; }
-#game-color-btns.v-layout { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-template-rows: auto auto; justify-items: center; align-items: end; row-gap: 12px; }
-#game-color-btns.v-layout #btn-red { grid-column: 1; grid-row: 1; }
-#game-color-btns.v-layout #btn-blue { grid-column: 2; grid-row: 2; }
-#game-color-btns.v-layout #btn-green { grid-column: 3; grid-row: 2; }
-#game-color-btns.v-layout #btn-yellow { grid-column: 4; grid-row: 1; }
-#game-color-btns.split-layout { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-template-rows: auto auto; justify-items: center; align-items: end; row-gap: 12px; column-gap: 8px; }
+#game-color-btns.v-layout { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+#game-color-btns.v-layout .v-row { display: flex; align-items: flex-end; }
+#game-color-btns.v-layout .v-row-top { justify-content: space-between; width: 90%; }
+#game-color-btns.v-layout .v-row-bottom { justify-content: center; gap: 20px; }
+#game-color-btns.split-layout { display: grid; grid-template-columns: auto auto auto auto; grid-template-rows: auto auto; justify-items: center; align-items: end; row-gap: 12px; column-gap: 8px; justify-content: center; }
 #game-color-btns.split-layout #btn-left-red { grid-column: 1; grid-row: 1; }
 #game-color-btns.split-layout #btn-left-blue { grid-column: 2; grid-row: 2; }
 #game-color-btns.split-layout #btn-right-blue { grid-column: 3; grid-row: 2; }
@@ -45,7 +44,7 @@ canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; pointe
 #game-color-btns.split3-layout #btn-right-green { grid-column: 2; grid-row: 3; }
 #btn-left-red::after, #btn-left-blue::after, #btn-left-green::after { content: '←'; position: absolute; top: -6px; right: -4px; font-size: 12px; color: #fff; text-shadow: 0 0 4px #000; }
 #btn-right-red::after, #btn-right-blue::after, #btn-right-green::after { content: '→'; position: absolute; top: -6px; left: -4px; font-size: 12px; color: #fff; text-shadow: 0 0 4px #000; }
-.color-btn { width: 70px; height: 70px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.25); color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; position: relative; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); background-clip: padding-box; }
+.color-btn { width: 70px; height: 70px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.25); color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; position: relative; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); background-clip: padding-box; flex-shrink: 0; min-width: 40px; min-height: 40px; box-sizing: border-box; }
 .color-btn:active { transform: scale(0.9); }
 .color-btn-red { background: rgba(255, 40, 40, 0.25); box-shadow: 0 0 12px rgba(255, 60, 60, 0.3), inset 0 0 8px rgba(255, 100, 100, 0.15); border-color: rgba(255, 100, 100, 0.35); }
 .color-btn-blue { background: rgba(40, 120, 255, 0.25); box-shadow: 0 0 12px rgba(60, 140, 255, 0.3), inset 0 0 8px rgba(100, 160, 255, 0.15); border-color: rgba(100, 160, 255, 0.35); }
@@ -115,8 +114,8 @@ canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; pointe
 </div>
 
 <!-- 暂停弹窗 -->
-<div id="pause-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:400; background:rgba(0,0,0,0.7);">
-  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(10,10,20,0.65); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-radius:16px; width:85%; max-width:320px; padding:30px 20px; border:1px solid rgba(255,255,255,0.12); text-align:center;">
+<div id="pause-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:400; background:rgba(0,0,0,0.3);">
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(10,10,20,0.35); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-radius:16px; width:85%; max-width:320px; padding:30px 20px; border:1px solid rgba(255,255,255,0.12); text-align:center;">
     <div style="color:#FFD700; font-size:22px; font-weight:bold; margin-bottom:24px; letter-spacing:4px;">暂停</div>
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; padding:0 10px;">
       <span style="color:#ccc; font-size:16px;">音乐</span>
@@ -134,8 +133,8 @@ canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; pointe
         <span id="sfx-dot" style="position:absolute; top:3px; left:3px; width:20px; height:20px; background:#fff; border-radius:50%; transition:0.3s;"></span>
       </label>
     </div>
-    <!-- UI位置设置（已固定：275px） -->
-    <div style="display:none;">
+    <!-- UI位置设置 -->
+    <div>
       <div style="color:#FFD700; font-size:14px; font-weight:bold; margin-bottom:10px; letter-spacing:1px;">开始按钮高度</div>
       <div style="margin-bottom:8px;">
         <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>距底部像素</span><span id="startpos-val">275</span></div>
@@ -150,8 +149,112 @@ canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; pointe
         <input type="range" id="cloud-speed" min="5" max="60" value="40" style="width:100%; accent-color:#FFD700;">
       </div>
     </div>
-    <button id="btn-resume" style="width:100%; padding:12px; background:linear-gradient(135deg,#4CAF50,#388E3C); color:#fff; border:none; border-radius:12px; font-size:17px; font-weight:bold; cursor:pointer; margin-bottom:12px; letter-spacing:2px;">继续游戏</button>
-    <button id="btn-home" style="width:100%; padding:12px; background:linear-gradient(135deg,#FF5252,#D32F2F); color:#fff; border:none; border-radius:12px; font-size:17px; font-weight:bold; cursor:pointer; letter-spacing:2px;">返回主页</button>
+    <!-- 按钮布局设置（可折叠） -->
+    <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; margin-bottom:14px;">
+      <div id="btn-layout-toggle" style="color:#FFD700; font-size:14px; font-weight:bold; margin-bottom:6px; letter-spacing:1px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+        <span>按钮布局 <span id="btn-layout-label" style="color:#aaa; font-weight:normal; font-size:12px;"></span></span>
+        <span id="btn-layout-arrow" style="font-size:12px; transition:transform 0.2s;">▼</span>
+      </div>
+      <div id="btn-layout-body" style="display:none; padding-top:8px;">
+        <div style="margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>按钮大小</span><span id="btn-size-val">70</span></div>
+          <input type="range" id="btn-size-slider" min="40" max="120" value="70" style="width:100%; accent-color:#FFD700;">
+        </div>
+        <!-- 2色布局 -->
+        <div id="btn-2color-section" style="display:none;">
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>距底部</span><span id="btn-2-bottom-val">10</span></div>
+            <input type="range" id="btn-2-bottom-slider" min="0" max="150" value="10" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>水平展开</span><span id="btn-2-spread-val">0</span></div>
+            <input type="range" id="btn-2-spread-slider" min="-80" max="80" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+        </div>
+        <!-- 3色布局 -->
+        <div id="btn-3color-section" style="display:none;">
+          <div style="color:#8af; font-size:11px; margin-bottom:4px;">左按钮</div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>上下</span><span id="btn-3l-ud-val">0</span></div>
+            <input type="range" id="btn-3l-ud-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>左右</span><span id="btn-3l-lr-val">0</span></div>
+            <input type="range" id="btn-3l-lr-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="color:#8af; font-size:11px; margin-bottom:4px;">中按钮</div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>上下</span><span id="btn-3m-ud-val">0</span></div>
+            <input type="range" id="btn-3m-ud-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>左右</span><span id="btn-3m-lr-val">0</span></div>
+            <input type="range" id="btn-3m-lr-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="color:#8af; font-size:11px; margin-bottom:4px;">右按钮</div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>上下</span><span id="btn-3r-ud-val">0</span></div>
+            <input type="range" id="btn-3r-ud-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>左右</span><span id="btn-3r-lr-val">0</span></div>
+            <input type="range" id="btn-3r-lr-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+        </div>
+        <!-- 4色V字布局 -->
+        <div id="btn-4color-section" style="display:none;">
+          <div style="color:#f66; font-size:11px; margin-bottom:4px;">红按钮</div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>上下</span><span id="btn-4r-ud-val">0</span></div>
+            <input type="range" id="btn-4r-ud-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>左右</span><span id="btn-4r-lr-val">0</span></div>
+            <input type="range" id="btn-4r-lr-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="color:#ff0; font-size:11px; margin-bottom:4px;">黄按钮</div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>上下</span><span id="btn-4y-ud-val">0</span></div>
+            <input type="range" id="btn-4y-ud-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>左右</span><span id="btn-4y-lr-val">0</span></div>
+            <input type="range" id="btn-4y-lr-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="color:#66f; font-size:11px; margin-bottom:4px;">蓝按钮</div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>上下</span><span id="btn-4b-ud-val">0</span></div>
+            <input type="range" id="btn-4b-ud-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>左右</span><span id="btn-4b-lr-val">0</span></div>
+            <input type="range" id="btn-4b-lr-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="color:#6f6; font-size:11px; margin-bottom:4px;">绿按钮</div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>上下</span><span id="btn-4g-ud-val">0</span></div>
+            <input type="range" id="btn-4g-ud-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>左右</span><span id="btn-4g-lr-val">0</span></div>
+            <input type="range" id="btn-4g-lr-slider" min="-150" max="150" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+        </div>
+        <!-- split布局 -->
+        <div id="btn-split-section" style="display:none;">
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>距底部</span><span id="btn-sp-bottom-val">10</span></div>
+            <input type="range" id="btn-sp-bottom-slider" min="0" max="150" value="10" style="width:100%; accent-color:#FFD700;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; color:#aaa; font-size:12px; margin-bottom:2px;"><span>水平展开</span><span id="btn-sp-spread-val">0</span></div>
+            <input type="range" id="btn-sp-spread-slider" min="-80" max="80" value="0" style="width:100%; accent-color:#FFD700;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <button id="btn-resume" style="width:100%; padding:12px; background:rgba(76,175,80,0.25); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); color:#8f8; border:1px solid rgba(76,175,80,0.3); border-radius:12px; font-size:17px; font-weight:bold; cursor:pointer; margin-bottom:12px; letter-spacing:2px;">继续游戏</button>
+    <button id="btn-home" style="width:100%; padding:12px; background:rgba(255,82,82,0.25); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); color:#f88; border:1px solid rgba(255,82,82,0.3); border-radius:12px; font-size:17px; font-weight:bold; cursor:pointer; letter-spacing:2px;">返回主页</button>
   </div>
 </div>
 
@@ -265,7 +368,7 @@ let nextBalloonYRight = 0; // 关卡9右侧专用
 const BALLOON_GAP = 70;
 const TREE_W = 40;
 let currentTreeStyle = 0;
-const TREE_STYLES = 5; // 0-4 共5种树干样式
+const TREE_STYLES = 3; // 0-2 共3种树干样式
 
 function randomizeTreeStyle() {
   currentTreeStyle = Math.floor(Math.random() * TREE_STYLES);
@@ -1147,6 +1250,7 @@ function initScene() {
 function resumeGame() {
   score = 0;
   resetArrays();
+  randomizeTreeStyle();
 
   // 重置对战变量
   leftScore = 0;
@@ -1293,6 +1397,12 @@ function startGame() {
 
 function updateColorButtons() {
   const btns = document.getElementById('game-color-btns');
+  // 先清除V字行容器，把按钮移回原位
+  const vRows = btns.querySelectorAll('.v-row');
+  vRows.forEach(row => {
+    while (row.firstChild) btns.appendChild(row.firstChild);
+    row.remove();
+  });
   // 先隐藏所有按钮
   ['btn-red','btn-blue','btn-green','btn-yellow','btn-left-red','btn-left-blue','btn-left-green','btn-right-red','btn-right-blue','btn-right-green'].forEach(id => {
     document.getElementById(id).style.display = 'none';
@@ -1321,12 +1431,23 @@ function updateColorButtons() {
     const lvl = findLevel(currentLevelId);
     const numColors = lvl ? lvl.colors : 2;
     if (numColors >= 4) {
-      // 四色V字布局
+      // 四色V字布局：用两行flex实现
       document.getElementById('btn-red').style.display = 'flex';
       document.getElementById('btn-blue').style.display = 'flex';
       document.getElementById('btn-green').style.display = 'flex';
       document.getElementById('btn-yellow').style.display = 'flex';
       btns.classList.add('v-layout');
+      // 创建行容器
+      const topRow = document.createElement('div');
+      topRow.className = 'v-row v-row-top';
+      const bottomRow = document.createElement('div');
+      bottomRow.className = 'v-row v-row-bottom';
+      topRow.appendChild(document.getElementById('btn-red'));
+      topRow.appendChild(document.getElementById('btn-yellow'));
+      bottomRow.appendChild(document.getElementById('btn-blue'));
+      bottomRow.appendChild(document.getElementById('btn-green'));
+      btns.appendChild(topRow);
+      btns.appendChild(bottomRow);
     } else if (numColors >= 3) {
       // 三色横排等距
       document.getElementById('btn-red').style.display = 'flex';
@@ -1344,6 +1465,9 @@ function updateColorButtons() {
   document.getElementById('btn-blue').textContent = '蓝';
   document.getElementById('btn-green').textContent = '绿';
   document.getElementById('btn-yellow').textContent = '黄';
+
+  // 应用按钮布局设置
+  applyBtnLayout();
 }
 
 function spawnBalloon(forceSide) {
@@ -2252,29 +2376,7 @@ function drawTree() {
       drawEdges();
       break;
 
-    case 1: // 冰晶柱
-      drawTrunkBody(['#1a3a4a','#2a5a6a','#3a7a8a','#4a9aaa','#3a7a8a','#2a5a6a','#1a3a4a']);
-      // 冰裂纹
-      ctx.strokeStyle = 'rgba(180,230,255,0.2)'; ctx.lineWidth = 0.8;
-      for (let wy = Math.floor(worldBottom / 50) * 50; wy <= worldTop; wy += 50) {
-        const sy = H / 2 + (wy - cameraY); const fx = cx + ((Math.abs(wy * 13 + 5)) % 16 - 8);
-        ctx.beginPath(); ctx.moveTo(fx - 4, sy - 3);
-        ctx.lineTo(fx + 2, sy); ctx.lineTo(fx - 1, sy + 4); ctx.stroke();
-      }
-      // 冰霜高光
-      ctx.fillStyle = 'rgba(200,240,255,0.1)'; ctx.fillRect(cx - 2, 0, 6, H);
-      ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fillRect(cx + 4, 0, 3, H);
-      // 冰晶闪光点
-      for (let wy = Math.floor(worldBottom / 120) * 120 + 40; wy <= worldTop; wy += 120) {
-        const sy = H / 2 + (wy - cameraY); const sx = cx + ((Math.abs(wy * 9 + 3)) % 12 - 6);
-        const sparkle = Math.sin(Date.now() / 300 + wy) * 0.3 + 0.5;
-        ctx.fillStyle = `rgba(200,240,255,${sparkle * 0.4})`;
-        ctx.beginPath(); ctx.arc(sx, sy, 2, 0, Math.PI * 2); ctx.fill();
-      }
-      drawEdges('rgba(100,200,220,0.2)');
-      break;
-
-    case 2: // 藤蔓缠绕
+    case 1: // 藤蔓缠绕
       drawTrunkBody(['#2E1A0E','#4A3220','#5C4030','#6B4E3A','#5C4030','#4A3220','#2E1A0E']);
       // 粗藤蔓（2条，世界坐标）
       for (let v = 0; v < 2; v++) {
@@ -2301,7 +2403,7 @@ function drawTree() {
       drawEdges();
       break;
 
-    case 3: // 岩石柱
+    case 2: // 岩石柱
       drawTrunkBody(['#2a2a2a','#3a3a3a','#4a4a4a','#555555','#4a4a4a','#3a3a3a','#2a2a2a']);
       // 岩层纹理（水平线）
       ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.lineWidth = 1;
@@ -2324,37 +2426,6 @@ function drawTree() {
         ctx.beginPath(); ctx.ellipse(mx, sy, 5, 2, 0.2, 0, Math.PI * 2); ctx.fill();
       }
       drawEdges('rgba(0,0,0,0.4)');
-      break;
-
-    case 4: // 魔法水晶柱
-      drawTrunkBody(['#1a0a2a','#2a1a4a','#3a2a6a','#4a3a8a','#3a2a6a','#2a1a4a','#1a0a2a']);
-      // 魔法符文（世界坐标，缓慢脉动）
-      const runePulse = Math.sin(Date.now() / 800) * 0.15 + 0.35;
-      ctx.strokeStyle = `rgba(180,120,255,${runePulse})`; ctx.lineWidth = 1;
-      for (let wy = Math.floor(worldBottom / 100) * 100 + 30; wy <= worldTop; wy += 100) {
-        const sy = H / 2 + (wy - cameraY); const rx = cx + ((Math.abs(wy * 7 + 3)) % 12 - 6);
-        // 小菱形符文
-        ctx.beginPath(); ctx.moveTo(rx, sy - 5); ctx.lineTo(rx + 4, sy);
-        ctx.lineTo(rx, sy + 5); ctx.lineTo(rx - 4, sy); ctx.closePath(); ctx.stroke();
-      }
-      // 魔法光流（竖向流动光线）
-      const flowOffset = (Date.now() / 50) % 20;
-      ctx.strokeStyle = 'rgba(160,100,255,0.08)'; ctx.lineWidth = 2;
-      for (let i = -2; i <= 2; i++) {
-        ctx.beginPath();
-        for (let sy = -flowOffset; sy < H; sy += 20) {
-          const fx = cx + i * 6 + Math.sin(sy * 0.05 + i) * 2;
-          if (sy <= 0) ctx.moveTo(fx, sy); else ctx.lineTo(fx, sy);
-        }
-        ctx.stroke();
-      }
-      // 中心光柱
-      const glowGrad = ctx.createLinearGradient(cx - 5, 0, cx + 5, 0);
-      glowGrad.addColorStop(0, 'rgba(0,0,0,0)');
-      glowGrad.addColorStop(0.5, `rgba(160,100,255,${0.06 + Math.sin(Date.now() / 600) * 0.02})`);
-      glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = glowGrad; ctx.fillRect(cx - 5, 0, 10, H);
-      drawEdges('rgba(120,80,200,0.25)');
       break;
   }
 }
@@ -4093,7 +4164,13 @@ function shuffleButtonPositions() {
 function resetBtnShuffle() {
   // 恢复按钮原始DOM顺序：红、蓝、绿、黄、左右按钮
   const container = document.getElementById('game-color-btns');
-  const originalOrder = ['btn-red', 'btn-blue', 'btn-green', 'btn-yellow', 'btn-left-red', 'btn-left-blue', 'btn-right-blue', 'btn-right-red'];
+  // 先清除V字行容器，把按钮移回原位
+  const vRows = container.querySelectorAll('.v-row');
+  vRows.forEach(row => {
+    while (row.firstChild) container.appendChild(row.firstChild);
+    row.remove();
+  });
+  const originalOrder = ['btn-red', 'btn-blue', 'btn-green', 'btn-yellow', 'btn-left-red', 'btn-left-blue', 'btn-left-green', 'btn-right-red', 'btn-right-blue', 'btn-right-green'];
   originalOrder.forEach(id => {
     const el = document.getElementById(id);
     if (el) container.appendChild(el);
@@ -4869,6 +4946,7 @@ function selectLevel(id, unlocked, event) {
   document.getElementById('start-text').textContent = '点击开始';
   score = 0;
   state = 'idle';
+  randomizeTreeStyle();
   updateColorButtons();
   initScene();
 }
@@ -4915,6 +4993,7 @@ document.getElementById('btn-pause').addEventListener('click', () => {
     state = 'paused';
     stopBgm();
     document.getElementById('pause-modal').style.display = 'block';
+    syncBtnLayoutSliders();
   }
 });
 
@@ -4923,6 +5002,8 @@ document.getElementById('btn-resume').addEventListener('click', () => {
   document.getElementById('pause-modal').style.display = 'none';
   state = pausedState || 'playing';
   if (state === 'playing') startBgm();
+  // 如果恢复到idle状态，重新应用开始按钮位置
+  if (state === 'idle') showStartUI(true);
 });
 
 // 返回主页
@@ -4937,6 +5018,7 @@ document.getElementById('btn-home').addEventListener('click', () => {
   resetMovingButtons();
   shuffleTimer = 0;
   resetBtnShuffle();
+  updateColorButtons();
   resetArrays();
   balloons.forEach(b => b.targeted = false);
   document.getElementById('gameover-popup').style.display = 'none';
@@ -5291,11 +5373,263 @@ document.getElementById('toggle-sfx').addEventListener('change', function() {
 });
 updateToggleUI();
 
-// 开始按钮位置（已固定275）
-customStartPosFromBottom = 275;
+// 开始按钮位置滑块
+document.getElementById('start-position').addEventListener('input', (e) => {
+  customStartPosFromBottom = parseInt(e.target.value);
+  document.getElementById('startpos-val').textContent = customStartPosFromBottom;
+  localStorage.setItem('arrow_startPosBottom', customStartPosFromBottom.toString());
+  // 实时更新按钮位置
+  const topPos = H - customStartPosFromBottom;
+  document.getElementById('float-start').style.top = topPos + 'px';
+  document.getElementById('btn-level').style.top = topPos + 'px';
+  document.getElementById('btn-theme').style.top = topPos + 'px';
+});
+document.getElementById('start-position').value = customStartPosFromBottom;
+document.getElementById('startpos-val').textContent = customStartPosFromBottom;
 
 // 云朵速度（已固定40）
 cloudSpeed = 40;
+
+// ==================== 按钮布局设置系统 ====================
+const btnLayoutConfigs = {
+  '2color':  { size: 70, bottom: 10, spread: 0 },
+  '3color':  { size: 70, leftUD: 0, leftLR: 0, midUD: 0, midLR: 0, rightUD: 0, rightLR: 0 },
+  '4color':  { size: 70, redUD: 0, redLR: 0, yellowUD: 0, yellowLR: 0, blueUD: 0, blueLR: 0, greenUD: 0, greenLR: 0 },
+  'split':   { size: 70, bottom: 10, spread: 0 },
+};
+// 从localStorage加载
+(function() {
+  const saved = localStorage.getItem('arrow_btnLayouts');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      Object.keys(parsed).forEach(k => {
+        if (btnLayoutConfigs[k]) Object.assign(btnLayoutConfigs[k], parsed[k]);
+      });
+    } catch(e) {}
+  }
+})();
+
+// 折叠/展开
+document.getElementById('btn-layout-toggle').addEventListener('click', () => {
+  const body = document.getElementById('btn-layout-body');
+  const arrow = document.getElementById('btn-layout-arrow');
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    arrow.style.transform = 'rotate(180deg)';
+  } else {
+    body.style.display = 'none';
+    arrow.style.transform = 'rotate(0deg)';
+  }
+});
+
+function getCurrentBtnLayoutKey() {
+  const btns = document.getElementById('game-color-btns');
+  if (btns.classList.contains('split3-layout') || btns.classList.contains('split-layout')) return 'split';
+  if (btns.classList.contains('v-layout')) return '4color';
+  const visibleBtns = ['btn-red','btn-blue','btn-green'].filter(id => document.getElementById(id).style.display !== 'none');
+  if (visibleBtns.length >= 3) return '3color';
+  return '2color';
+}
+
+function applyBtnLayout() {
+  const key = getCurrentBtnLayoutKey();
+  const cfg = btnLayoutConfigs[key];
+  if (!cfg) return;
+
+  const btns = document.getElementById('game-color-btns');
+  const allBtnIds = ['btn-red','btn-blue','btn-green','btn-yellow','btn-left-red','btn-left-blue','btn-left-green','btn-right-red','btn-right-blue','btn-right-green'];
+  allBtnIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.style.display !== 'none') {
+      el.style.width = cfg.size + 'px';
+      el.style.height = cfg.size + 'px';
+      el.style.minWidth = cfg.size + 'px';
+      el.style.minHeight = cfg.size + 'px';
+      el.style.maxWidth = cfg.size + 'px';
+      el.style.maxHeight = cfg.size + 'px';
+      el.style.fontSize = Math.max(12, cfg.size * 0.26) + 'px';
+      // 清除所有transform和margin偏移
+      el.style.transform = '';
+      el.style.marginLeft = '';
+      el.style.marginRight = '';
+      el.style.marginTop = '';
+      el.style.marginBottom = '';
+    }
+  });
+
+  if (key === '2color') {
+    btns.style.bottom = cfg.bottom + 'px';
+    const red = document.getElementById('btn-red');
+    const blue = document.getElementById('btn-blue');
+    // spread: 正值=展开，负值=收缩。左按钮向左移，右按钮向右移
+    red.style.transform = `translate(${-cfg.spread}px, 0)`;
+    blue.style.transform = `translate(${cfg.spread}px, 0)`;
+  } else if (key === '3color') {
+    btns.style.bottom = '10px';
+    const ids = ['btn-red', 'btn-blue', 'btn-green'];
+    const uds = [cfg.leftUD, cfg.midUD, cfg.rightUD];
+    const lrs = [cfg.leftLR, cfg.midLR, cfg.rightLR];
+    ids.forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.style.transform = `translate(${lrs[i]}px, ${-uds[i]}px)`;
+    });
+  } else if (key === '4color') {
+    btns.style.bottom = '10px';
+    // 4色V字：每个按钮独立上下左右
+    const btn4Map = [
+      { id: 'btn-red', ud: cfg.redUD, lr: cfg.redLR },
+      { id: 'btn-yellow', ud: cfg.yellowUD, lr: cfg.yellowLR },
+      { id: 'btn-blue', ud: cfg.blueUD, lr: cfg.blueLR },
+      { id: 'btn-green', ud: cfg.greenUD, lr: cfg.greenLR },
+    ];
+    btn4Map.forEach(b => {
+      const el = document.getElementById(b.id);
+      el.style.transform = `translate(${b.lr}px, ${-b.ud}px)`;
+    });
+  } else if (key === 'split') {
+    btns.style.bottom = cfg.bottom + 'px';
+    btns.style.columnGap = (30 + cfg.spread * 2) + 'px';
+  }
+}
+
+function syncBtnLayoutSliders() {
+  const key = getCurrentBtnLayoutKey();
+  const cfg = btnLayoutConfigs[key];
+  if (!cfg) return;
+
+  const labels = { '2color':'双色', '3color':'三色', '4color':'四色V字', 'split':'左右对战' };
+  document.getElementById('btn-layout-label').textContent = '(' + (labels[key] || key) + ')';
+
+  document.getElementById('btn-size-slider').value = cfg.size;
+  document.getElementById('btn-size-val').textContent = cfg.size;
+
+  // 隐藏所有子面板
+  ['btn-2color-section','btn-3color-section','btn-4color-section','btn-split-section'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+
+  if (key === '2color') {
+    document.getElementById('btn-2color-section').style.display = 'block';
+    document.getElementById('btn-2-bottom-slider').value = cfg.bottom;
+    document.getElementById('btn-2-bottom-val').textContent = cfg.bottom;
+    document.getElementById('btn-2-spread-slider').value = cfg.spread;
+    document.getElementById('btn-2-spread-val').textContent = cfg.spread;
+  } else if (key === '3color') {
+    document.getElementById('btn-3color-section').style.display = 'block';
+    document.getElementById('btn-3l-ud-slider').value = cfg.leftUD;
+    document.getElementById('btn-3l-ud-val').textContent = cfg.leftUD;
+    document.getElementById('btn-3l-lr-slider').value = cfg.leftLR;
+    document.getElementById('btn-3l-lr-val').textContent = cfg.leftLR;
+    document.getElementById('btn-3m-ud-slider').value = cfg.midUD;
+    document.getElementById('btn-3m-ud-val').textContent = cfg.midUD;
+    document.getElementById('btn-3m-lr-slider').value = cfg.midLR;
+    document.getElementById('btn-3m-lr-val').textContent = cfg.midLR;
+    document.getElementById('btn-3r-ud-slider').value = cfg.rightUD;
+    document.getElementById('btn-3r-ud-val').textContent = cfg.rightUD;
+    document.getElementById('btn-3r-lr-slider').value = cfg.rightLR;
+    document.getElementById('btn-3r-lr-val').textContent = cfg.rightLR;
+  } else if (key === '4color') {
+    document.getElementById('btn-4color-section').style.display = 'block';
+    document.getElementById('btn-4r-ud-slider').value = cfg.redUD;
+    document.getElementById('btn-4r-ud-val').textContent = cfg.redUD;
+    document.getElementById('btn-4r-lr-slider').value = cfg.redLR;
+    document.getElementById('btn-4r-lr-val').textContent = cfg.redLR;
+    document.getElementById('btn-4y-ud-slider').value = cfg.yellowUD;
+    document.getElementById('btn-4y-ud-val').textContent = cfg.yellowUD;
+    document.getElementById('btn-4y-lr-slider').value = cfg.yellowLR;
+    document.getElementById('btn-4y-lr-val').textContent = cfg.yellowLR;
+    document.getElementById('btn-4b-ud-slider').value = cfg.blueUD;
+    document.getElementById('btn-4b-ud-val').textContent = cfg.blueUD;
+    document.getElementById('btn-4b-lr-slider').value = cfg.blueLR;
+    document.getElementById('btn-4b-lr-val').textContent = cfg.blueLR;
+    document.getElementById('btn-4g-ud-slider').value = cfg.greenUD;
+    document.getElementById('btn-4g-ud-val').textContent = cfg.greenUD;
+    document.getElementById('btn-4g-lr-slider').value = cfg.greenLR;
+    document.getElementById('btn-4g-lr-val').textContent = cfg.greenLR;
+  } else if (key === 'split') {
+    document.getElementById('btn-split-section').style.display = 'block';
+    document.getElementById('btn-sp-bottom-slider').value = cfg.bottom;
+    document.getElementById('btn-sp-bottom-val').textContent = cfg.bottom;
+    document.getElementById('btn-sp-spread-slider').value = cfg.spread;
+    document.getElementById('btn-sp-spread-val').textContent = cfg.spread;
+  }
+}
+
+function saveBtnLayouts() {
+  localStorage.setItem('arrow_btnLayouts', JSON.stringify(btnLayoutConfigs));
+}
+
+// 绑定滑块事件
+(function() {
+  const sizeSlider = document.getElementById('btn-size-slider');
+
+  function onUpdate() {
+    const key = getCurrentBtnLayoutKey();
+    const cfg = btnLayoutConfigs[key];
+    if (!cfg) return;
+    cfg.size = parseInt(sizeSlider.value);
+    document.getElementById('btn-size-val').textContent = cfg.size;
+
+    if (key === '2color') {
+      cfg.bottom = parseInt(document.getElementById('btn-2-bottom-slider').value);
+      cfg.spread = parseInt(document.getElementById('btn-2-spread-slider').value);
+      document.getElementById('btn-2-bottom-val').textContent = cfg.bottom;
+      document.getElementById('btn-2-spread-val').textContent = cfg.spread;
+    } else if (key === '3color') {
+      cfg.leftUD = parseInt(document.getElementById('btn-3l-ud-slider').value);
+      cfg.leftLR = parseInt(document.getElementById('btn-3l-lr-slider').value);
+      cfg.midUD = parseInt(document.getElementById('btn-3m-ud-slider').value);
+      cfg.midLR = parseInt(document.getElementById('btn-3m-lr-slider').value);
+      cfg.rightUD = parseInt(document.getElementById('btn-3r-ud-slider').value);
+      cfg.rightLR = parseInt(document.getElementById('btn-3r-lr-slider').value);
+      document.getElementById('btn-3l-ud-val').textContent = cfg.leftUD;
+      document.getElementById('btn-3l-lr-val').textContent = cfg.leftLR;
+      document.getElementById('btn-3m-ud-val').textContent = cfg.midUD;
+      document.getElementById('btn-3m-lr-val').textContent = cfg.midLR;
+      document.getElementById('btn-3r-ud-val').textContent = cfg.rightUD;
+      document.getElementById('btn-3r-lr-val').textContent = cfg.rightLR;
+    } else if (key === '4color') {
+      cfg.redUD = parseInt(document.getElementById('btn-4r-ud-slider').value);
+      cfg.redLR = parseInt(document.getElementById('btn-4r-lr-slider').value);
+      cfg.yellowUD = parseInt(document.getElementById('btn-4y-ud-slider').value);
+      cfg.yellowLR = parseInt(document.getElementById('btn-4y-lr-slider').value);
+      cfg.blueUD = parseInt(document.getElementById('btn-4b-ud-slider').value);
+      cfg.blueLR = parseInt(document.getElementById('btn-4b-lr-slider').value);
+      cfg.greenUD = parseInt(document.getElementById('btn-4g-ud-slider').value);
+      cfg.greenLR = parseInt(document.getElementById('btn-4g-lr-slider').value);
+      document.getElementById('btn-4r-ud-val').textContent = cfg.redUD;
+      document.getElementById('btn-4r-lr-val').textContent = cfg.redLR;
+      document.getElementById('btn-4y-ud-val').textContent = cfg.yellowUD;
+      document.getElementById('btn-4y-lr-val').textContent = cfg.yellowLR;
+      document.getElementById('btn-4b-ud-val').textContent = cfg.blueUD;
+      document.getElementById('btn-4b-lr-val').textContent = cfg.blueLR;
+      document.getElementById('btn-4g-ud-val').textContent = cfg.greenUD;
+      document.getElementById('btn-4g-lr-val').textContent = cfg.greenLR;
+    } else if (key === 'split') {
+      cfg.bottom = parseInt(document.getElementById('btn-sp-bottom-slider').value);
+      cfg.spread = parseInt(document.getElementById('btn-sp-spread-slider').value);
+      document.getElementById('btn-sp-bottom-val').textContent = cfg.bottom;
+      document.getElementById('btn-sp-spread-val').textContent = cfg.spread;
+    }
+    applyBtnLayout();
+    saveBtnLayouts();
+  }
+
+  // 收集所有滑块
+  const allSliders = [sizeSlider,
+    document.getElementById('btn-2-bottom-slider'), document.getElementById('btn-2-spread-slider'),
+    document.getElementById('btn-3l-ud-slider'), document.getElementById('btn-3l-lr-slider'),
+    document.getElementById('btn-3m-ud-slider'), document.getElementById('btn-3m-lr-slider'),
+    document.getElementById('btn-3r-ud-slider'), document.getElementById('btn-3r-lr-slider'),
+    document.getElementById('btn-4r-ud-slider'), document.getElementById('btn-4r-lr-slider'),
+    document.getElementById('btn-4y-ud-slider'), document.getElementById('btn-4y-lr-slider'),
+    document.getElementById('btn-4b-ud-slider'), document.getElementById('btn-4b-lr-slider'),
+    document.getElementById('btn-4g-ud-slider'), document.getElementById('btn-4g-lr-slider'),
+    document.getElementById('btn-sp-bottom-slider'), document.getElementById('btn-sp-spread-slider'),
+  ];
+  allSliders.forEach(s => { if (s) s.addEventListener('input', onUpdate); });
+})();
 
 // 主题按钮
 document.getElementById('btn-theme').addEventListener('click', (e) => {
@@ -5348,7 +5682,7 @@ const themeData = {
   bg: []
 };
 let currentThemeCat = 'arrow';
-let currentThemes = { arrow: 'arrow_classic', bg: 'bg_dynamic_nebula' };
+let currentThemes = { arrow: 'arrow_classic', bg: 'bg_frosted_neon_rain' };
 
 function showThemeModal(cat) {
   if (cat) currentThemeCat = cat;
